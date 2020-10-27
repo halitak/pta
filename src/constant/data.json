@@ -1,0 +1,78 @@
+{
+  "members": [
+    {
+      "id": "member1",
+      "name": "Leanne Graham",
+      "role": "role1",
+      "teams": ["team1", "team2"]
+    },
+    {
+      "id": "member2",
+      "name": "Ervin Howell",
+      "role": "role1",
+      "teams": ["team1", "team3"]
+    },
+    {
+      "id": "member3",
+      "name": "Clementine Bauch",
+      "role": "role2",
+      "teams": []
+    },
+    {
+      "id": "member4",
+      "name": "Patricia Lebsack",
+      "role": "role2",
+      "teams": ["team2"]
+    },
+    {
+      "id": "member5",
+      "name": "Chelsey Dietrich",
+      "role": "role2",
+      "teams": ["team3"]
+    },
+    {
+      "id": "member6",
+      "name": "Dennis Schulist",
+      "role": "role3",
+      "teams": ["team2"]
+    },
+    {
+      "id": "member7",
+      "name": "Kurtis Weissnat",
+      "role": "role2",
+      "teams": ["team3"]
+    },
+    {
+      "id": "member8",
+      "name": "Nicholas Runolfsdottir",
+      "role": "role3",
+      "teams": ["team3"]
+    }
+  ],
+  "roles": [
+    { "id": "role1", "name": "Frontend Developer" },
+    { "id": "role2", "name": "Backend Developer" },
+    { "id": "role3", "name": "Project Manager" },
+    { "id": "role4", "name": "System Manager" }
+  ],
+  "teams": [
+    {
+      "id": "team1",
+      "name": "Romaguera-Crona",
+      "rules": { "role1": 2 },
+      "members": ["member1", "member2"]
+    },
+    {
+      "id": "team2",
+      "name": "Deckow-Crist",
+      "rules": { "role1": 1, "role2": 1, "role3": 1 },
+      "members": ["member4", "member6", "member1"]
+    },
+    {
+      "id": "team3",
+      "name": "Romaguera-Jacobson",
+      "rules": { "role1": 1, "role2": 2, "role3": 1 },
+      "members": ["member2", "member5", "member7", "member8"]
+    }
+  ]
+}
