@@ -3,21 +3,39 @@ import { Link } from 'react-router-dom'
 
 import './Navbar.css'
 
+const NAV_MENUS = [
+  {
+    path: '/',
+    title: 'Home'
+  },
+  {
+    path: '/role',
+    title: 'Role'
+  },
+  {
+    path: '/member',
+    title: 'Member'
+  },
+  {
+    path: '/team',
+    title: 'Team'
+  }
+]
+
 const Navbar = () => {
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar--link">
-        Home
-      </Link>
-      <Link to="/role" className="navbar--link">
-        Add Role
-      </Link>
-      <Link to="/member" className="navbar--link">
-        Add Member
-      </Link>
-      <Link to="/team" className="navbar--link">
-        Create Team
-      </Link>
+      {NAV_MENUS.map((menu) => {
+        return (
+          <Link
+            to={menu.path}
+            key={menu.title.toLowerCase()}
+            className="navbar--link"
+          >
+            {menu.title}
+          </Link>
+        )
+      })}
     </nav>
   )
 }
