@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { addTeam } from '../../actions/teamAction'
 import { updateMember } from '../../actions/memberActions'
+
 import Notification from '../../components/Notification'
+import Badge from '../../components/Badge'
 
 import './Team.css'
 
-const MAX_ASSIGN = 2
+const MAX_ASSIGN = 3
 
 const Team = ({ roles, members, teams, addTeam, updateMember }) => {
   const [notify, setNotify] = useState({
@@ -164,9 +166,9 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
               return (
                 <p key={[rule]} className={count === rules[rule] ? 'full' : ''}>
                   <span>{roles.find((role) => role.id === rule).name}</span>
-                  <small>
-                    ({count}/{rules[rule]})
-                  </small>
+                  <Badge color={count === rules[rule] && 'lightcoral'}>
+                    {count}/{rules[rule]}
+                  </Badge>
                 </p>
               )
             })}
@@ -202,22 +204,15 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
           <div className="card__body">
             {teamMembers.map((teamMember) => {
               const member = members.find((member) => member.id === teamMember)
+              const role = roles.find((role) => role.id === member.role)
+              const memberTeams = member.teams
+                .map((teamId) => teams.find((team) => team.id === teamId).name)
+                .join(', ')
               return (
                 <p key={member.id}>
                   <span>{member.name}</span>
-                  <small>
-                    ({roles.find((role) => role.id === member.role).name})
-                  </small>
-                  <small>
-                    (
-                    {member.teams
-                      .map(
-                        (teamId) =>
-                          teams.find((team) => team.id === teamId).name
-                      )
-                      .join(', ')}
-                    )
-                  </small>
+                  <Badge color={role.color}>{role.name}</Badge>
+                  {memberTeams.length > 0 && <Badge>{memberTeams}</Badge>}
                 </p>
               )
             })}

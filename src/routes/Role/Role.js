@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { addRole } from '../../actions/roleActions'
+
 import Notification from '../../components/Notification'
+import Badge from '../../components/Badge'
 
 const Role = ({ roles, addRole }) => {
   const [notify, setNotify] = useState({
@@ -12,6 +14,7 @@ const Role = ({ roles, addRole }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const name = e.target.role.value
+    const color = e.target.color.value
     if (name === '')
       setNotify({
         active: true,
@@ -26,7 +29,11 @@ const Role = ({ roles, addRole }) => {
           message: 'Role name already added'
         })
       else {
-        addRole({ id: `role${roles.length + 1}`, name })
+        addRole({
+          id: `role${roles.length + 1}`,
+          name,
+          color: color === '#000000' ? '#ddd' : color
+        })
         setNotify({ active: true, success: true, message: 'Role added' })
       }
     }
@@ -52,6 +59,10 @@ const Role = ({ roles, addRole }) => {
           <input id="role" />
         </div>
         <div className="form__input">
+          <label htmlFor="color">Color</label>
+          <input type="color" id="color" />
+        </div>
+        <div className="form__input">
           <button>Add Role</button>
         </div>
       </form>
@@ -62,7 +73,9 @@ const Role = ({ roles, addRole }) => {
         <div className="card__body">
           {roles.map((role) => (
             <p key={role.id}>
-              <span>{role.name}</span>
+              <Badge color={role.color} size={16}>
+                {role.name}
+              </Badge>
             </p>
           ))}
         </div>

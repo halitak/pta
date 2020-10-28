@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import Badge from '../../components/Badge'
+
 const Home = ({ teams }) => {
   return (
     <React.Fragment>
@@ -17,7 +19,9 @@ const Home = ({ teams }) => {
                   return (
                     <p key={member.id}>
                       <span>{member.name}</span>
-                      <small>({member.role.name})</small>
+                      <Badge color={member.role.color}>
+                        {member.role.name}
+                      </Badge>
                     </p>
                   )
                 })}

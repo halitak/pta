@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { addMember } from '../../actions/memberActions'
+
 import Notification from '../../components/Notification'
+import Badge from '../../components/Badge'
 
 const Member = ({ members, roles, addMember }) => {
   const [notify, setNotify] = useState({
@@ -72,12 +74,11 @@ const Member = ({ members, roles, addMember }) => {
         </div>
         <div className="card__body">
           {members.map((member) => {
+            const role = roles.find((role) => role.id === member.role)
             return (
               <p key={member.id}>
                 <span>{member.name}</span>
-                <small>
-                  ({roles.find((role) => role.id === member.role).name})
-                </small>
+                <Badge color={role.color}>{role.name}</Badge>
               </p>
             )
           })}

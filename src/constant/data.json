@@ -50,10 +50,10 @@
     }
   ],
   "roles": [
-    { "id": "role1", "name": "Frontend Developer" },
-    { "id": "role2", "name": "Backend Developer" },
-    { "id": "role3", "name": "Project Manager" },
-    { "id": "role4", "name": "System Manager" }
+    { "id": "role1", "name": "Frontend Developer", "color": "lightblue" },
+    { "id": "role2", "name": "Backend Developer", "color": "lightcoral" },
+    { "id": "role3", "name": "Project Manager", "color": "lightgreen" },
+    { "id": "role4", "name": "System Manager", "color": "lightsalmon" }
   ],
   "teams": [
     {
