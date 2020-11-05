@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { addRole } from '../../actions/roleActions'
+import { addRole, removeRole } from '../../actions/roleActions'
 
 import Notification from '../../components/Notification'
 import Badge from '../../components/Badge'
 
-const Role = ({ roles, addRole }) => {
+const Role = ({ roles, addRole, removeRole }) => {
+  console.log(roles)
   const [notify, setNotify] = useState({
     active: false,
     success: false,
@@ -30,13 +31,16 @@ const Role = ({ roles, addRole }) => {
         })
       else {
         addRole({
-          id: `role${roles.length + 1}`,
           name,
           color: color === '#000000' ? '#ddd' : color
         })
         setNotify({ active: true, success: true, message: 'Role added' })
       }
     }
+  }
+  const handleRemove = (roleId) => {
+    removeRole(roleId)
+    setNotify({ active: true, success: true, message: 'Role removed' })
   }
   useEffect(() => {
     if (notify.active === true) {
@@ -72,10 +76,11 @@ const Role = ({ roles, addRole }) => {
         </div>
         <div className="card__body">
           {roles.map((role) => (
-            <p key={role.id}>
+            <p key={role._id}>
               <Badge color={role.color} size={16}>
                 {role.name}
               </Badge>
+              <button onClick={() => handleRemove(role._id)}>Remove</button>
             </p>
           ))}
         </div>
@@ -92,6 +97,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addRole: (role) => {
       dispatch(addRole(role))
+    },
+    removeRole: (roleId) => {
+      dispatch(removeRole(roleId))
     }
   }
 }

@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import { getRoles } from './actions/roleActions'
 
 import 'normalize.css/normalize.css'
 import './index.css'
@@ -10,7 +12,8 @@ import './index.css'
 import App from './App'
 import rootReducer from './reducers/rootReducer'
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer, applyMiddleware(thunk))
+store.dispatch(getRoles())
 
 ReactDOM.render(
   <React.StrictMode>
