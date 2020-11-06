@@ -246,9 +246,9 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
 
 const mapStateToProps = (state) => {
   return {
-    members: state.member.members,
-    roles: state.role.roles,
-    teams: state.team.teams
+    members: state.members,
+    roles: state.roles,
+    teams: state.teams
   }
 }
 

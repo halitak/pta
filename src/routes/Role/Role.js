@@ -97,7 +97,7 @@ const Role = ({ roles, members, addRole, removeRole }) => {
 }
 
 const mapStateToProps = (state) => {
-  return { roles: state.role.roles, members: state.member.members }
+  return { roles: state.roles, members: state.members }
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -1,7 +1,9 @@
+import { get, post, remove } from '../helpers/fetch'
+const API_URI = `${process.env.REACT_APP_API_URI}/api/teams`
+
 export const getTeams = () => {
   return (dispatch, getState) => {
-    fetch('http://localhost:4000/api/teams')
-      .then((res) => res.json())
+    get(API_URI)
       .then((json) => {
         dispatch({ type: 'GET_TEAMS', teams: json })
       })
@@ -13,14 +15,7 @@ export const getTeams = () => {
 
 export const addTeam = (team) => {
   return (dispatch, getState) => {
-    fetch('http://localhost:4000/api/teams', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(team)
-    })
-      .then((res) => res.json())
+    post(API_URI, team)
       .then((json) => {
         dispatch({ type: 'ADD_TEAM', team: json })
       })
@@ -32,10 +27,7 @@ export const addTeam = (team) => {
 
 export const removeTeam = (teamId) => {
   return (dispatch, getState) => {
-    fetch(`http://localhost:4000/api/teams/${teamId}`, {
-      method: 'DELETE'
-    })
-      .then((res) => res.json())
+    remove(`${API_URI}/${teamId}`)
       .then((json) => {
         dispatch({ type: 'REMOVE_TEAM', teamId: json._id })
       })

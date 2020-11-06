@@ -5,9 +5,9 @@ import memberReducer from './memberReducer'
 import teamReducer from './teamReducer'
 
 const rootReducer = combineReducers({
-  role: roleReducer,
-  member: memberReducer,
-  team: teamReducer
+  roles: roleReducer,
+  members: memberReducer,
+  teams: teamReducer
 })
 
 export default rootReducer

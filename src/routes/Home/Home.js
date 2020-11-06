@@ -68,19 +68,17 @@ const Home = ({ members, teams, removeTeam, updateMember }) => {
 }
 
 const mapStateToProps = (state) => {
-  const teams = state.team.teams.map((team) => {
+  const teams = state.teams.map((team) => {
     const members = team.members.map((memberId) => {
-      const member = state.member.members.find(
-        (member) => member._id === memberId
-      )
-      const role = state.role.roles.find((role) => role._id === member.role)
+      const member = state.members.find((member) => member._id === memberId)
+      const role = state.roles.find((role) => role._id === member.role)
       return { ...member, role }
     })
     return { ...team, members }
   })
   return {
     teams,
-    members: state.member.members
+    members: state.members
   }
 }
 
