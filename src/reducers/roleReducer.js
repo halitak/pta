@@ -1,15 +1,21 @@
-import data from '../constant/data.json'
-
 const initState = {
-  roles: data.roles
+  roles: []
 }
 
 const roleReducer = (state = initState, action) => {
   switch (action.type) {
+    case 'GET_ROLES':
+      return { ...state, roles: action.roles }
     case 'ADD_ROLE':
+      return { ...state, roles: [...state.roles, action.role] }
+    case 'REMOVE_ROLE':
       return {
         ...state,
-        roles: [...state.roles, action.role]
+        roles: state.roles.filter((role) => role._id !== action.roleId)
+      }
+    case 'ERROR':
+      return {
+        ...state
       }
     default:
       break
