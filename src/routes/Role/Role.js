@@ -5,8 +5,7 @@ import { addRole, removeRole } from '../../actions/roleActions'
 import Notification from '../../components/Notification'
 import Badge from '../../components/Badge'
 
-const Role = ({ roles, addRole, removeRole }) => {
-  console.log(roles)
+const Role = ({ roles, members, addRole, removeRole }) => {
   const [notify, setNotify] = useState({
     active: false,
     success: false,
@@ -39,8 +38,16 @@ const Role = ({ roles, addRole, removeRole }) => {
     }
   }
   const handleRemove = (roleId) => {
-    removeRole(roleId)
-    setNotify({ active: true, success: true, message: 'Role removed' })
+    if (members.some((member) => member.role === roleId))
+      setNotify({
+        active: true,
+        success: false,
+        message: 'Role already in use, not removed'
+      })
+    else {
+      removeRole(roleId)
+      setNotify({ active: true, success: true, message: 'Role removed' })
+    }
   }
   useEffect(() => {
     if (notify.active === true) {
@@ -90,7 +97,7 @@ const Role = ({ roles, addRole, removeRole }) => {
 }
 
 const mapStateToProps = (state) => {
-  return { roles: state.role.roles }
+  return { roles: state.role.roles, members: state.member.members }
 }
 
 const mapDispatchToProps = (dispatch) => {

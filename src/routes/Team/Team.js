@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { addTeam } from '../../actions/teamAction'
+import { addTeam } from '../../actions/teamActions'
 import { updateMember } from '../../actions/memberActions'
 
 import Notification from '../../components/Notification'
@@ -47,7 +47,7 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
         message: 'Member already added'
       })
     else {
-      const member = members.find((member) => member.id === memberId)
+      const member = members.find((member) => member._id === memberId)
       if (member.teams.length === MAX_ASSIGN)
         setNotify({
           active: true,
@@ -63,7 +63,7 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
       } else {
         const limit = rules[member.role]
         const count = teamMembers.reduce((pre, crr) => {
-          const _member = members.find((_member) => _member.id === crr)
+          const _member = members.find((_member) => _member._id === crr)
           return _member.role === member.role ? pre + 1 : pre
         }, 0)
         if (count === limit)
@@ -98,19 +98,19 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
         message: 'Team name already added'
       })
     else {
-      const teamId = `team${teams.length + 1}`
       addTeam({
-        id: teamId,
         name: teamName,
         rules: rules,
         members: teamMembers
       })
-      members.forEach((member) => {
+      /* members.forEach((member) => {
         teamMembers.forEach((memberId) => {
-          if (member.id === memberId) member.teams.push(teamId)
+          if (member._id === memberId) {
+            member.teams.push(teamId)
+          }
         })
-      })
-      updateMember(members)
+      })*/
+      //updateMember(members)
       setNotify({ active: true, success: true, message: 'Team created' })
       setRules({})
       setTeamMembers([])
@@ -127,6 +127,18 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
     }
   }, [notify])
 
+  useEffect(() => {
+    if (notify.success) {
+      const team = teams[teams.length - 1]
+      team.members.forEach((memberId) => {
+        const member = members.find((_member) => _member._id === memberId)
+        member.teams.push(team._id)
+        updateMember(member)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teams])
+
   return (
     <React.Fragment>
       <Notification active={notify.active} success={notify.success}>
@@ -138,7 +150,7 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
           <label htmlFor="role">Role</label>
           <select id="role">
             {roles.map((role) => (
-              <option key={role.id} value={role.id}>
+              <option key={role._id} value={role._id}>
                 {role.name}
               </option>
             ))}
@@ -160,12 +172,12 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
           <div className="card__body">
             {Object.keys(rules).map((rule) => {
               const count = teamMembers.reduce((pre, crr) => {
-                const member = members.find((member) => member.id === crr)
+                const member = members.find((member) => member._id === crr)
                 return member.role === rule ? pre + 1 : pre
               }, 0)
               return (
                 <p key={[rule]} className={count === rules[rule] ? 'full' : ''}>
-                  <span>{roles.find((role) => role.id === rule).name}</span>
+                  <span>{roles.find((role) => role._id === rule).name}</span>
                   <Badge color={count === rules[rule] && 'lightcoral'}>
                     {count}/{rules[rule]}
                   </Badge>
@@ -182,9 +194,9 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
             {members.map((member) => {
               const teamCount = member.teams.length
               return (
-                <option key={member.id} value={member.id}>
+                <option key={member._id} value={member._id}>
                   {member.name} (
-                  {roles.find((role) => role.id === member.role).name}) (
+                  {roles.find((role) => role._id === member.role).name}) (
                   {teamCount}
                   {teamCount > 1 ? ' teams' : ' team'})
                 </option>
@@ -203,13 +215,13 @@ const Team = ({ roles, members, teams, addTeam, updateMember }) => {
           </div>
           <div className="card__body">
             {teamMembers.map((teamMember) => {
-              const member = members.find((member) => member.id === teamMember)
-              const role = roles.find((role) => role.id === member.role)
+              const member = members.find((member) => member._id === teamMember)
+              const role = roles.find((role) => role._id === member.role)
               const memberTeams = member.teams
-                .map((teamId) => teams.find((team) => team.id === teamId).name)
+                .map((teamId) => teams.find((team) => team._id === teamId).name)
                 .join(', ')
               return (
-                <p key={member.id}>
+                <p key={member._id}>
                   <span>{member.name}</span>
                   <Badge color={role.color}>{role.name}</Badge>
                   {memberTeams.length > 0 && <Badge>{memberTeams}</Badge>}
@@ -245,8 +257,8 @@ const mapDispatchToProps = (dispatch) => {
     addTeam: (team) => {
       dispatch(addTeam(team))
     },
-    updateMember: (members) => {
-      dispatch(updateMember(members))
+    updateMember: (member) => {
+      dispatch(updateMember(member))
     }
   }
 }

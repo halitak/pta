@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { addMember } from '../../actions/memberActions'
+import { addMember, removeMember } from '../../actions/memberActions'
 
 import Notification from '../../components/Notification'
 import Badge from '../../components/Badge'
 
-const Member = ({ members, roles, addMember }) => {
+const Member = ({ members, roles, addMember, removeMember }) => {
   const [notify, setNotify] = useState({
     active: false,
     success: false,
@@ -29,9 +29,21 @@ const Member = ({ members, roles, addMember }) => {
           message: 'Member name already added'
         })
       else {
-        addMember({ id: `member${members.length + 1}`, name, role, teams: [] })
+        addMember({ name, role, teams: [] })
         setNotify({ active: true, success: true, message: 'Member added' })
       }
+    }
+  }
+  const handleRemove = (member) => {
+    if (member.teams.length > 0)
+      setNotify({
+        active: true,
+        success: false,
+        message: 'Member already in use, not removed'
+      })
+    else {
+      removeMember(member._id)
+      setNotify({ active: true, success: true, message: 'Member removed' })
     }
   }
   useEffect(() => {
@@ -58,7 +70,7 @@ const Member = ({ members, roles, addMember }) => {
           <label htmlFor="role">Role</label>
           <select id="role">
             {roles.map((role) => (
-              <option key={role.id} value={role.id}>
+              <option key={role._id} value={role._id}>
                 {role.name}
               </option>
             ))}
@@ -74,11 +86,12 @@ const Member = ({ members, roles, addMember }) => {
         </div>
         <div className="card__body">
           {members.map((member) => {
-            const role = roles.find((role) => role.id === member.role)
+            const role = roles.find((role) => role._id === member.role)
             return (
-              <p key={member.id}>
+              <p key={member._id}>
                 <span>{member.name}</span>
                 <Badge color={role.color}>{role.name}</Badge>
+                <button onClick={() => handleRemove(member)}>Remove</button>
               </p>
             )
           })}
@@ -89,13 +102,19 @@ const Member = ({ members, roles, addMember }) => {
 }
 
 const mapStateToProps = (state) => {
-  return { members: state.member.members, roles: state.role.roles }
+  return {
+    members: state.member.members,
+    roles: state.role.roles
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     addMember: (member) => {
       dispatch(addMember(member))
+    },
+    removeMember: (memberId) => {
+      dispatch(removeMember(memberId))
     }
   }
 }
