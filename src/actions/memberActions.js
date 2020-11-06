@@ -1,7 +1,9 @@
+import { get, post, remove, put } from '../helpers/fetch'
+const API_URI = `${process.env.REACT_APP_API_URI}/api/members`
+
 export const getMembers = () => {
   return (dispatch, getState) => {
-    fetch('http://localhost:4000/api/members')
-      .then((res) => res.json())
+    get(API_URI)
       .then((json) => {
         dispatch({ type: 'GET_MEMBERS', members: json })
       })
@@ -12,14 +14,7 @@ export const getMembers = () => {
 }
 export const addMember = (member) => {
   return (dispatch, getState) => {
-    fetch('http://localhost:4000/api/members', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(member)
-    })
-      .then((res) => res.json())
+    post(API_URI, member)
       .then((json) => {
         dispatch({ type: 'ADD_MEMBER', member: json })
       })
@@ -31,14 +26,7 @@ export const addMember = (member) => {
 
 export const updateMember = (member) => {
   return (dispatch, getState) => {
-    fetch(`http://localhost:4000/api/members/${member._id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(member)
-    })
-      .then((res) => res.json())
+    put(`${API_URI}/${member._id}`, member)
       .then((json) => {
         dispatch({ type: 'UPDATE_MEMBER', member })
       })
@@ -50,10 +38,7 @@ export const updateMember = (member) => {
 
 export const removeMember = (memberId) => {
   return (dispatch, getState) => {
-    fetch(`http://localhost:4000/api/members/${memberId}`, {
-      method: 'DELETE'
-    })
-      .then((res) => res.json())
+    remove(`${API_URI}/${memberId}`)
       .then((json) => {
         dispatch({ type: 'REMOVE_MEMBER', memberId: json._id })
       })

@@ -103,8 +103,8 @@ const Member = ({ members, roles, addMember, removeMember }) => {
 
 const mapStateToProps = (state) => {
   return {
-    members: state.member.members,
-    roles: state.role.roles
+    members: state.members,
+    roles: state.roles
   }
 }
 

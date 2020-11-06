@@ -1,9 +1,12 @@
+import { get, post, remove } from '../helpers/fetch'
+const API_URI = `${process.env.REACT_APP_API_URI}/api/roles`
+
 export const getRoles = () => {
   return (dispatch, getState) => {
-    fetch('http://localhost:4000/api/roles')
-      .then((res) => res.json())
-      .then((json) => {
-        dispatch({ type: 'GET_ROLES', roles: json })
+    get(API_URI)
+      .then((roles) => {
+        console.log(roles)
+        dispatch({ type: 'GET_ROLES', roles })
       })
       .catch((err) => {
         dispatch({ type: 'ERROR', err })
@@ -13,16 +16,9 @@ export const getRoles = () => {
 
 export const addRole = (role) => {
   return (dispatch, getState) => {
-    fetch('http://localhost:4000/api/roles', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(role)
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        dispatch({ type: 'ADD_ROLE', role: json })
+    post(API_URI, role)
+      .then((role) => {
+        dispatch({ type: 'ADD_ROLE', role })
       })
       .catch((err) => {
         dispatch({ type: 'ERROR', err })
@@ -32,10 +28,7 @@ export const addRole = (role) => {
 
 export const removeRole = (roleId) => {
   return (dispatch, getState) => {
-    fetch(`http://localhost:4000/api/roles/${roleId}`, {
-      method: 'DELETE'
-    })
-      .then((res) => res.json())
+    remove(`${API_URI}/${roleId}`)
       .then((json) => {
         dispatch({ type: 'REMOVE_ROLE', roleId: json._id })
       })
